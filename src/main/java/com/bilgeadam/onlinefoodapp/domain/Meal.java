@@ -1,6 +1,11 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,6 +33,7 @@ public class Meal {
     private String detail;
 
     @Column(name = "CREATION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date creationDate;
 
     public Meal() {
