@@ -1,9 +1,7 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -19,13 +17,34 @@ public class Employee {
     @Column(name = "SURNAME")
     private String surname;
 
+    @Column(name = "USERNAME")
+    private String username;
+
+    @Column(name = "PASSWORD")
+    private String password;
+
+    @OneToOne
+    @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
+    private Employee employee;
+
+    @ManyToMany
+    @JoinTable(
+            name = "EMPLOYEE_ROLE",
+            joinColumns = @JoinColumn(name = "EMP_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<Role> roles;
+
     public Employee() {
     }
 
-    public Employee(Long empId, String name, String surname) {
+    public Employee(Long empId, String name, String surname, String username, String password, Employee employee, Set<Role> roles) {
         this.empId = empId;
         this.name = name;
         this.surname = surname;
+        this.username = username;
+        this.password = password;
+        this.employee = employee;
+        this.roles = roles;
     }
 
     public Long getEmpId() {
@@ -50,5 +69,37 @@ public class Employee {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

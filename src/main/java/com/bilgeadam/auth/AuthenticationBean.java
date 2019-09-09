@@ -1,4 +1,4 @@
-package com.bilgeadam.onlinefoodapp.auth;
+package com.bilgeadam.auth;
 
 public class AuthenticationBean {
     private String message;

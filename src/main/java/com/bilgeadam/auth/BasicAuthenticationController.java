@@ -1,4 +1,4 @@
-package com.bilgeadam.onlinefoodapp.auth;
+package com.bilgeadam.auth;
 
 import org.springframework.web.bind.annotation.*;
 
