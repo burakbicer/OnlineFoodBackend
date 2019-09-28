@@ -1,5 +1,7 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,7 +20,8 @@ public class Role {
     private String explanation;
 
     @ManyToMany(mappedBy = "roles")
-    Set<Employee> employees;
+    @JsonManagedReference
+    private Set<Employee> employees;
 
     public Role() {
     }

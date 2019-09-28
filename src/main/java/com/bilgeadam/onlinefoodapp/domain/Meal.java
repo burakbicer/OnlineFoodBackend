@@ -1,13 +1,10 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity(name = "MEAL")
 public class Meal {
@@ -18,6 +15,7 @@ public class Meal {
 
     @OneToOne
     @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
+    @JsonIgnore
     private Employee employee;
 
     @Column(name = "NAME")

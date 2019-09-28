@@ -1,5 +1,8 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,32 +21,30 @@ public class Employee {
     private String surname;
 
     @Column(name = "USERNAME")
+    @JsonIgnore
     private String username;
 
     @Column(name = "PASSWORD")
+    @JsonIgnore
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
-    private Employee employee;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "EMPLOYEE_ROLE",
             joinColumns = @JoinColumn(name = "EMP_ID"),
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    @JsonBackReference
     private Set<Role> roles;
 
     public Employee() {
     }
 
-    public Employee(Long empId, String name, String surname, String username, String password, Employee employee, Set<Role> roles) {
+    public Employee(Long empId, String name, String surname, String username, String password, Set<Role> roles) {
         this.empId = empId;
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.password = password;
-        this.employee = employee;
         this.roles = roles;
     }
 
@@ -85,14 +86,6 @@ public class Employee {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
     }
 
     public Set<Role> getRoles() {
