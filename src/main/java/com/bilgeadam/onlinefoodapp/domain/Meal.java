@@ -1,7 +1,6 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,7 +14,6 @@ public class Meal {
 
     @OneToOne
     @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
-    @JsonIgnore
     private Employee employee;
 
     @Column(name = "NAME")
