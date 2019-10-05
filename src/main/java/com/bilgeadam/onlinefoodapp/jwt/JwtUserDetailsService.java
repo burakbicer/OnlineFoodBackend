@@ -1,7 +1,7 @@
 package com.bilgeadam.onlinefoodapp.jwt;
 
 import com.bilgeadam.onlinefoodapp.domain.Employee;
-import com.bilgeadam.onlinefoodapp.repo.EmployeeRepository;
+import com.bilgeadam.onlinefoodapp.repo.EmployeeServiceImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,15 +12,15 @@ import java.util.Optional;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeServiceImpl employeeService;
 
-    public JwtUserDetailsService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public JwtUserDetailsService(EmployeeServiceImpl employeeService) {
+        this.employeeService = employeeService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Employee> userFromDB = employeeRepository.findByUsername(username);
+        Optional<Employee> userFromDB = employeeService.findByUsername(username);
         JwtUserDetails jwtUserDetails = null;
         if (userFromDB.isPresent()) {
             jwtUserDetails = new JwtUserDetails(userFromDB.get());

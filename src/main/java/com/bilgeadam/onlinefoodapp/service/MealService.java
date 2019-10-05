@@ -2,9 +2,8 @@ package com.bilgeadam.onlinefoodapp.service;
 
 import com.bilgeadam.onlinefoodapp.domain.Employee;
 import com.bilgeadam.onlinefoodapp.domain.Meal;
-import com.bilgeadam.onlinefoodapp.repo.EmployeeRepository;
+import com.bilgeadam.onlinefoodapp.repo.EmployeeServiceImpl;
 import com.bilgeadam.onlinefoodapp.repo.MealRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +14,12 @@ import java.util.Optional;
 public class MealService {
 
     private final MealRepository mealRepository;
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeServiceImpl employeeService;
 
     @Autowired
-    public MealService(MealRepository mealRepository,EmployeeRepository employeeRepository) {
+    public MealService(MealRepository mealRepository, EmployeeServiceImpl employeeService) {
         this.mealRepository = mealRepository;
-        this.employeeRepository = employeeRepository;
+        this.employeeService = employeeService;
     }
 
     public List<Meal> getAllMeals() {
@@ -36,7 +35,7 @@ public class MealService {
     }
 
     public Meal save(Meal meal){
-        Optional<Employee> employee = employeeRepository.findById(1L);
+        Optional<Employee> employee = employeeService.findById(1L);
         employee.ifPresent(meal::setEmployee);
         return mealRepository.save(meal);
     }
