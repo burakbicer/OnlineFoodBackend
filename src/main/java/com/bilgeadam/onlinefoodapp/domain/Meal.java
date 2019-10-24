@@ -1,6 +1,7 @@
 package com.bilgeadam.onlinefoodapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +15,7 @@ public class Meal {
 
     @OneToOne
     @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
+    @JsonIgnore
     private Employee employee;
 
     @Column(name = "NAME")
@@ -32,10 +34,13 @@ public class Meal {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date creationDate;
 
+    @Column(name = "CAMPAIGN")
+    private Boolean campaign;
+
     public Meal() {
     }
 
-    public Meal(String code, Employee employee, String name, Long price, String photo, String detail, Date creationDate) {
+    public Meal(String code, Employee employee, String name, Long price, String photo, String detail, Date creationDate, Boolean campaign) {
         this.code = code;
         this.employee = employee;
         this.name = name;
@@ -43,6 +48,7 @@ public class Meal {
         this.photo = photo;
         this.detail = detail;
         this.creationDate = creationDate;
+        this.campaign = campaign;
     }
 
     public String getCode() {
@@ -99,5 +105,13 @@ public class Meal {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Boolean getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Boolean campaign) {
+        this.campaign = campaign;
     }
 }
