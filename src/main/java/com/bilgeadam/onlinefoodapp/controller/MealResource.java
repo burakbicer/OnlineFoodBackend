@@ -29,6 +29,11 @@ public class MealResource {
         return mealService.getAllMeals();
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/campaigns")
+    public List<Meal> getCampaignMeals(){
+        return mealService.getCampaignMeals();
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/{code}")
     public Optional<Meal> getMeal(@PathVariable String code){
         return mealService.findByCode(code);

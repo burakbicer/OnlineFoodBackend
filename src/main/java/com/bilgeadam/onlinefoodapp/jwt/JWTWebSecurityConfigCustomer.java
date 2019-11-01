@@ -3,10 +3,10 @@ package com.bilgeadam.onlinefoodapp.jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,31 +17,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@Order(2)
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class JWTWebSecurityConfigCustomer extends WebSecurityConfigurerAdapter {
 
     private final JwtUnauthorizedEntryPoint jwtUnauthorizedEntryPoint;
-    private final JwtUserDetailsService jwtUserDetailsService;
-    private final JwtTokenAuthorizationFilter jwtAuthenticationTokenFilter;
+    private final JwtUserDetailsCustomerService jwtUserDetailsCustomerService;
+    private final JwtTokenAuthorizationFilter jwtTokenAuthorizationFilter;
 
-    public JWTWebSecurityConfig(JwtUnauthorizedEntryPoint jwtUnauthorizedEntryPoint, JwtUserDetailsService jwtUserDetailsService, JwtTokenAuthorizationFilter jwtAuthenticationTokenFilter) {
+    public JWTWebSecurityConfigCustomer(JwtUnauthorizedEntryPoint jwtUnauthorizedEntryPoint,
+                                        JwtUserDetailsCustomerService jwtUserDetailsCustomerService,
+                                        JwtTokenAuthorizationFilter jwtTokenAuthorizationFilter) {
         this.jwtUnauthorizedEntryPoint = jwtUnauthorizedEntryPoint;
-        this.jwtUserDetailsService = jwtUserDetailsService;
-        this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
+        this.jwtUserDetailsCustomerService = jwtUserDetailsCustomerService;
+        this.jwtTokenAuthorizationFilter = jwtTokenAuthorizationFilter;
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoderBean());
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(jwtUserDetailsCustomerService).passwordEncoder(passwordEncoderBean());
     }
 
-    @Bean
+    @Bean(name = "passwordEncoderCustomer")
     public PasswordEncoder passwordEncoderBean() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    @Bean(name = "authenticationManagerCustomer")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -57,7 +59,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         httpSecurity
-                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtTokenAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity
                 .headers()
@@ -69,7 +71,7 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity
                 .ignoring()
-                .antMatchers(HttpMethod.POST,"/authenticate")
+                .antMatchers(HttpMethod.POST,"/customer/authenticate")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .and()
                 .ignoring()

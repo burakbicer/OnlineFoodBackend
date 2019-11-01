@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsCustomerService implements UserDetailsService {
 
     private final EmployeeServiceImpl employeeService;
 
-    public JwtUserDetailsService(EmployeeServiceImpl employeeService) {
+    public JwtUserDetailsCustomerService(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 

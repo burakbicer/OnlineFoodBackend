@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,11 +20,13 @@ import java.io.IOException;
 public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final UserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsAdminService jwtUserDetailsAdminService;
+    private final JwtUserDetailsCustomerService jwtUserDetailsCustomerService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtTokenAuthorizationFilter(UserDetailsService jwtUserDetailsService, JwtTokenUtil jwtTokenUtil) {
-        this.jwtUserDetailsService = jwtUserDetailsService;
+    public JwtTokenAuthorizationFilter(JwtUserDetailsAdminService jwtUserDetailsAdminService, JwtUserDetailsCustomerService jwtUserDetailsCustomerService, JwtTokenUtil jwtTokenUtil) {
+        this.jwtUserDetailsAdminService = jwtUserDetailsAdminService;
+        this.jwtUserDetailsCustomerService = jwtUserDetailsCustomerService;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -53,9 +54,14 @@ public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
         logger.debug("JWT_TOKEN_USERNAME_VALUE '{}'", username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+            String userType = jwtTokenUtil.getClaimFromToken(jwtToken, claims -> (String) claims.get("userType"));
+            UserDetails userDetails=null;
+            if("admin".equals(userType))
+                userDetails = this.jwtUserDetailsAdminService.loadUserByUsername(username);
+            else if("customer".equals(userType))
+                userDetails = this.jwtUserDetailsCustomerService.loadUserByUsername(username);
 
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            if (userDetails!=null && jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);

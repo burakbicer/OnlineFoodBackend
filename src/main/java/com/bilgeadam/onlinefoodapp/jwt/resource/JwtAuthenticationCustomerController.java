@@ -2,7 +2,9 @@ package com.bilgeadam.onlinefoodapp.jwt.resource;
 
 import com.bilgeadam.onlinefoodapp.jwt.JwtTokenUtil;
 import com.bilgeadam.onlinefoodapp.jwt.JwtUserDetails;
-import com.bilgeadam.onlinefoodapp.jwt.JwtUserDetailsService;
+import com.bilgeadam.onlinefoodapp.jwt.JwtUserDetailsAdminService;
+import com.bilgeadam.onlinefoodapp.jwt.JwtUserDetailsCustomerService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,16 +19,20 @@ import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class JwtAuthenticationController {
+@RequestMapping(path = "/customer")
+public class JwtAuthenticationCustomerController {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManagerCustomer;
     private final JwtTokenUtil jwtTokenUtil;
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsCustomerService jwtUserDetailsCustomerService;
 
-    public JwtAuthenticationController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
-        this.authenticationManager = authenticationManager;
+    public JwtAuthenticationCustomerController(@Qualifier("authenticationManagerCustomer") AuthenticationManager authenticationManagerCustomer,
+                                               JwtTokenUtil jwtTokenUtil,
+                                               JwtUserDetailsAdminService jwtUserDetailsAdminService,
+                                               JwtUserDetailsCustomerService jwtUserDetailsCustomerService) {
+        this.authenticationManagerCustomer = authenticationManagerCustomer;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.jwtUserDetailsService = jwtUserDetailsService;
+        this.jwtUserDetailsCustomerService = jwtUserDetailsCustomerService;
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -36,9 +41,9 @@ public class JwtAuthenticationController {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final UserDetails userDetails = jwtUserDetailsCustomerService.loadUserByUsername(authenticationRequest.getUsername());
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final String token = jwtTokenUtil.generateToken(userDetails,"customer");
 
         return ResponseEntity.ok(new JwtTokenResponse(token));
     }
@@ -48,7 +53,7 @@ public class JwtAuthenticationController {
         String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUserDetails user = (JwtUserDetails) jwtUserDetailsService.loadUserByUsername(username);
+        JwtUserDetails user = (JwtUserDetails) jwtUserDetailsCustomerService.loadUserByUsername(username);
 
         if (jwtTokenUtil.canTokenBeRefreshed(token)) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
@@ -68,7 +73,7 @@ public class JwtAuthenticationController {
         Objects.requireNonNull(password);
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManagerCustomer.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new AuthenticationException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

@@ -9,4 +9,5 @@ public interface MealRepository extends CrudRepository<Meal, String> {
     List<Meal> findAll();
     void deleteById(String code);
     Optional<Meal> findById(String code);
+    List<Meal> findAllByCampaignTrue();
 }

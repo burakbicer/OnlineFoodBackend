@@ -26,6 +26,10 @@ public class MealService {
         return mealRepository.findAll();
     }
 
+    public List<Meal> getCampaignMeals() {
+        return mealRepository.findAllByCampaignTrue();
+    }
+
     public void delete(String code) {
         mealRepository.deleteById(code);
     }
