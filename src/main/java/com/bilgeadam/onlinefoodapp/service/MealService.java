@@ -30,11 +30,11 @@ public class MealService {
         return mealRepository.findAllByCampaignTrue();
     }
 
-    public void delete(String code) {
+    public void delete(Long code) {
         mealRepository.deleteById(code);
     }
 
-    public Optional<Meal> findByCode(String code){
+    public Optional<Meal> findByCode(Long code){
         return mealRepository.findById(code);
     }
 

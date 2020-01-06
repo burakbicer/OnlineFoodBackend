@@ -35,7 +35,7 @@ public class MealResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{code}")
-    public Optional<Meal> getMeal(@PathVariable String code){
+    public Optional<Meal> getMeal(@PathVariable Long code){
         return mealService.findByCode(code);
     }
 
@@ -53,7 +53,7 @@ public class MealResource {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{code}")
-    public ResponseEntity<Void> delete(@PathVariable String code){
+    public ResponseEntity<Void> delete(@PathVariable Long code){
         try{
             mealService.delete(code);
             return ResponseEntity.noContent().build();

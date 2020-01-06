@@ -10,8 +10,8 @@ import java.util.Date;
 public class Meal {
 
     @Id
-    @Column(name = "CODE")
-    private String code;
+    @GeneratedValue
+    private Long code;
 
     @OneToOne
     @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
@@ -40,7 +40,7 @@ public class Meal {
     public Meal() {
     }
 
-    public Meal(String code, Employee employee, String name, Long price, String photo, String detail, Date creationDate, Boolean campaign) {
+    public Meal(Long code, Employee employee, String name, Long price, String photo, String detail, Date creationDate, Boolean campaign) {
         this.code = code;
         this.employee = employee;
         this.name = name;
@@ -51,11 +51,11 @@ public class Meal {
         this.campaign = campaign;
     }
 
-    public String getCode() {
+    public Long getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Long code) {
         this.code = code;
     }
 

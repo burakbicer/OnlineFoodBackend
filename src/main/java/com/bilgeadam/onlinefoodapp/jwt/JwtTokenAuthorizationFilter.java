@@ -22,11 +22,13 @@ public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final JwtUserDetailsAdminService jwtUserDetailsAdminService;
     private final JwtUserDetailsCustomerService jwtUserDetailsCustomerService;
+    private final JwtUserDetailsCustomer2Service jwtUserDetailsCustomer2Service;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtTokenAuthorizationFilter(JwtUserDetailsAdminService jwtUserDetailsAdminService, JwtUserDetailsCustomerService jwtUserDetailsCustomerService, JwtTokenUtil jwtTokenUtil) {
+    public JwtTokenAuthorizationFilter(JwtUserDetailsAdminService jwtUserDetailsAdminService, JwtUserDetailsCustomerService jwtUserDetailsCustomerService, JwtUserDetailsCustomer2Service jwtUserDetailsCustomer2Service, JwtTokenUtil jwtTokenUtil) {
         this.jwtUserDetailsAdminService = jwtUserDetailsAdminService;
         this.jwtUserDetailsCustomerService = jwtUserDetailsCustomerService;
+        this.jwtUserDetailsCustomer2Service = jwtUserDetailsCustomer2Service;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -61,7 +63,10 @@ public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
             else if("customer".equals(userType))
                 userDetails = this.jwtUserDetailsCustomerService.loadUserByUsername(username);
 
-            if (userDetails!=null && jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            else if("customer2".equals(userType))
+                userDetails = this.jwtUserDetailsCustomer2Service.loadUserByUsername(username);
+
+            if (userDetails!=null) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
