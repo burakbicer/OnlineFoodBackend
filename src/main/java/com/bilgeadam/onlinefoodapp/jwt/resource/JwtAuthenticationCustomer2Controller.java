@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -43,17 +44,15 @@ public class JwtAuthenticationCustomer2Controller {
         return ResponseEntity.ok(new JwtTokenResponse(token));
     }
 
-    @RequestMapping(value = "/refresh2", method = RequestMethod.GET)
-    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
-        String authToken = request.getHeader("Authorization");
-        final String token = authToken.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUserDetails user = (JwtUserDetails) jwtUserDetailsCustomer2Service.loadUserByUsername(username);
-
-        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
-        } else {
+    @RequestMapping(value = "/refresh2", method = RequestMethod.POST)
+    public ResponseEntity<?> refreshAndGetAuthenticationToken(@RequestBody String token) {
+        token = token.substring(10, token.length()-2);
+        try {
+            if (jwtTokenUtil.isTokenExpired(token)) {
+                String refreshedToken = jwtTokenUtil.refreshToken(token);
+                return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
+            } else return ResponseEntity.ok(new JwtTokenResponse(token));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }

@@ -1,7 +1,9 @@
 package com.bilgeadam.onlinefoodapp.controller;
 
-//comment olarak yazacağım sen sonradan düzenlersin burası customer için controler burdan direk kayıt yapavilirsin
-//create api sini kulanarak
+// customer için controller burdan direk kayıt yapabiliriz
+// create api sini kulanarak
+
+import com.bilgeadam.onlinefoodapp.OnlinefoodappApplication;
 import com.bilgeadam.onlinefoodapp.domain.Customer;
 import com.bilgeadam.onlinefoodapp.dto.CreateCustomerDto;
 import com.bilgeadam.onlinefoodapp.service.CustomerService;
@@ -19,7 +21,7 @@ public class CustomerResource {
     public CustomerResource(CustomerService customerService) {
         this.customerService = customerService;
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, path = "/create")
     public Customer createCustomer(@RequestBody CreateCustomerDto createCustomerDto) {
         return customerService.createUser(createCustomerDto);

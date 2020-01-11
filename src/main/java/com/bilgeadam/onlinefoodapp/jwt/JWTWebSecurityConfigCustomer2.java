@@ -17,20 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 //bu jwt ile olan configler sabit
 
-/**
- antMatchers(HttpMethod.POST, "/customer2/authenticate2")
- .antMatchers(HttpMethod.POST, "/orders/changeOrderStatus")
-
-
- burda ki önemli ksım sen apilere tokensız ulaşamıyorsun
- //ilki token üretmek için diğer postmanda denemiştik ya statusü preapared olsun dite o kısım için passive cektim
-
-
- hocam jwt nedir unutmuşum anlatır mısın hocam
- senin yazdığın apileri daha gücenli hale getiryor bi text üretip onunla fronetend istek atar ve ona süre de eklyebiklirsin
- bunu sağlar token ise text t
- r uzun bir random üretilmiş tezt
- */
 @Configuration
 @Order(3)
 @EnableWebSecurity
@@ -80,6 +66,11 @@ public class JWTWebSecurityConfigCustomer2 extends WebSecurityConfigurerAdapter 
                 .headers()
                 .frameOptions().sameOrigin()
                 .cacheControl();
+        httpSecurity
+                .rememberMe().key("uniqueAndSecret")
+                .rememberMeParameter("remember") //Name of checkbox at login page
+                .rememberMeCookieName("rememberLoginInfo") //Cookie name
+                .tokenValiditySeconds(300000); //Remember login credentials for number of seconds
     }
 
     @Override
@@ -87,6 +78,7 @@ public class JWTWebSecurityConfigCustomer2 extends WebSecurityConfigurerAdapter 
         webSecurity
                 .ignoring()
                 .antMatchers(HttpMethod.POST, "/customer2/authenticate2")
+                .antMatchers(HttpMethod.POST, "/customer2/refresh2")
                 .antMatchers(HttpMethod.POST, "/orders/changeOrderStatus")
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .and()

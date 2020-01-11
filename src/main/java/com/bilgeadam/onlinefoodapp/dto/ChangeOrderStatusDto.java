@@ -1,6 +1,7 @@
 package com.bilgeadam.onlinefoodapp.dto;
-// peki bunlar neden gerekli ?
-//bunlar da postmandan ver frontend den gelen obje yapısı dto alntındaki hepsi
+
+// Frontend den gelen obje yapısı dto altındaki hepsi
+
 public class ChangeOrderStatusDto {
     private Long orderId;
     private String orderStatus;

@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-//order status change yaptığı ve historyu date ye göre sıraladığı api de burası
-//controler request mapping i ne denir. mesela http://localhost:8080/create bi apidir.
-//order create etttiğimiz kısım da burada
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/orders")
-public class OrdersResource {
+public class OrdersResource {  // Order status change yaptığı ve historyi date'e göre sıraladığı api
 
     private final OrdersService ordersService;
 
@@ -37,5 +35,4 @@ public class OrdersResource {
     public Order changeOrderStatus(@RequestBody ChangeOrderStatusDto changeOrderStatusDto) {
         return ordersService.changeOrderStatus(changeOrderStatusDto);
     }
-
 }

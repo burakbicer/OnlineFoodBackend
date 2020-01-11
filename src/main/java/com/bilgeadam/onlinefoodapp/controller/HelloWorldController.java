@@ -3,7 +3,7 @@ package com.bilgeadam.onlinefoodapp.controller;
 import com.bilgeadam.onlinefoodapp.domain.HelloWorldBean;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*") // bunu sonra ekleyeceksin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/initial")
 public class HelloWorldController {

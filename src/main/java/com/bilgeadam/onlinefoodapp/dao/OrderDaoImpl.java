@@ -12,7 +12,6 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-//burada aynı kardeşim @repository olanlar @Service olanları söyledim zaten
 @Repository
 public class OrderDaoImpl implements OrderDao {
 

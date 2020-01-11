@@ -16,7 +16,7 @@ public class JwtUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
-
+//burada emloyee alıyor farklı configleri var
     JwtUserDetails(Employee employee) {
         this.id = employee.getEmpId();
         this.username = employee.getUsername();

@@ -55,10 +55,18 @@ public class JwtAuthenticationAdminController {
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUserDetails user = (JwtUserDetails) jwtUserDetailsAdminService.loadUserByUsername(username);
 
-        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
-        } else {
+//        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
+//            String refreshedToken = jwtTokenUtil.refreshToken(token);
+//            return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
+//        } else {
+//            return ResponseEntity.badRequest().body(null);
+//        }
+        try {
+            if (jwtTokenUtil.isTokenExpired(token)) {
+                String refreshedToken = jwtTokenUtil.refreshToken(token);
+                return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
+            } else return ResponseEntity.ok(new JwtTokenResponse(token));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }

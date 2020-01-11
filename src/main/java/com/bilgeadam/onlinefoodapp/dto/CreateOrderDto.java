@@ -1,9 +1,9 @@
 package com.bilgeadam.onlinefoodapp.dto;
-//burada  username si bu olan kulalnıcı şu meal idleri yemek olarak siariş veritor
-//add remove kısmı vardı orasdaki veri yapısı aslında ...
+
+// burada  username si bu olan kullanıcı şu meal idleri yemek olarak sipariş veriyor
+// add remove kısmındaki veri yapısı
+
 public class CreateOrderDto {
-//user bitden fazla yemek idsi seçiyor ya o aslında bak burası burdan geliyor
-    // remove kısmı nerede hocam yazıyor
     private String username;
     private Long[] mealId;
 
