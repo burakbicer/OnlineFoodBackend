@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-// Bu da aynı eve
+
 @Service
 public class OrdersService {
     private final OrderDaoImpl orderDao;
