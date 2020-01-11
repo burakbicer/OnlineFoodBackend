@@ -1,7 +1,5 @@
 package com.bilgeadam.onlinefoodapp.service;
 
-//burasıda zaten service repoyu cagiriyor veriyi kaydediyor
-
 import com.bilgeadam.onlinefoodapp.domain.Customer;
 import com.bilgeadam.onlinefoodapp.dto.CreateCustomerDto;
 import com.bilgeadam.onlinefoodapp.repo.CustomerRepository;
@@ -10,12 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// peki bunlar?
-
-//bu da o repoya giden istekleri hazırlar
-// createCustomerDto şu nedir hocam veritabanı ile alakalı mı
-//o kısım ise postmandan veta frontend en gelen request objesi yaratılıyor öyle mi ynane
-//Tamam
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
