@@ -84,3 +84,13 @@ CREATE TABLE "CUSTOMER"
    
 ```
 
+
+### Application.properties file
+After you create the tables, you can set the username and password from the application.properties file.
+
+```
+spring.datasource.username=sys as SYSDBA
+spring.datasource.password=123
+```
+
+
